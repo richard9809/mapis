@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: permit-gateway-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: permit_gateway
+      POSTGRES_USER: permit_user
+      POSTGRES_PASSWORD: permit_pass
+      # Optional tuning for dev; uncomment if you need locale/encoding:
+      # POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U permit_user -d permit_gateway" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: supersecret
+    ports: [ "5050:80" ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

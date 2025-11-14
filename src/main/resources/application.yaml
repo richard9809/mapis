@@ -1,3 +1,44 @@
 spring:
   application:
     name: mapis
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/permit_gateway
+    username: permit_user
+    password: permit_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+
+# Apache Camel
+camel:
+  springboot:
+    name: permit-gateway
+
+agencies:
+  env:
+    base-url: https://ea42f31a-ea70-4368-bbed-12ceecaee289.mock.pstmn.io
+  fire:
+    base-url: https://ea42f31a-ea70-4368-bbed-12ceecaee289.mock.pstmn.io
+  health:
+    base-url: https://ea42f31a-ea70-4368-bbed-12ceecaee289.mock.pstmn.io
